@@ -11,6 +11,24 @@ pipeline {
             steps {
                 // Tự động kéo code từ Git về
                 checkout scm
+                
+                // Đảm bảo lấy code mới nhất từ remote
+                sh '''
+                    git fetch origin
+                    git reset --hard origin/master || git reset --hard origin/main
+                '''
+                
+                // Debug: Hiển thị commit hash và nội dung file để xác nhận code đúng
+                sh '''
+                    echo "=== Git Information ==="
+                    echo "Current commit:"
+                    git rev-parse HEAD
+                    git log -1 --oneline
+                    echo ""
+                    echo "=== app.py content ==="
+                    cat app.py
+                    echo ""
+                '''
             }
         }
 
