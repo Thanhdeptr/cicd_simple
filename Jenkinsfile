@@ -1,9 +1,7 @@
 pipeline {
-    // 'agent' là nơi pipeline sẽ chạy. 
-    // Ở đây, ta bảo Jenkins chạy trong một Docker container có cài sẵn Python 3.9
-    agent {
-        docker { image 'python:3.9-slim' } 
-    }
+    // 'agent' là nơi pipeline sẽ chạy.
+    // Sử dụng 'any' để chạy trên Jenkins node có sẵn (cần cài Python 3)
+    agent any
 
     stages {
         // Một pipeline có nhiều 'stage' (giai đoạn)
@@ -37,7 +35,7 @@ pipeline {
                 // Chạy file test_app.py với verbose output
                 // Test fail sẽ tự động làm build fail (exit code != 0)
                 sh '''
-                    python -m unittest test_app.py -v
+                    python3 -m unittest test_app.py -v || python -m unittest test_app.py -v
                 '''
             }
             post {
